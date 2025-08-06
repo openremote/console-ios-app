@@ -102,10 +102,10 @@ extension WizardDomainViewController: UITextFieldDelegate {
     }
 
     fileprivate func requestAppConfig(_ domain: String) {
-        async {
+        Task.init {
             do {
                 configManager = ConfigManager(apiManagerFactory: { url in
-                    try HttpApiManager(baseUrl: url)
+                    HttpApiManager(baseUrl: url)
                 })
 
                 let state = try await configManager!.setDomain(domain: domain)
@@ -124,10 +124,6 @@ extension WizardDomainViewController: UITextFieldDelegate {
                 case.complete:
                     self.performSegue(withIdentifier: Segues.goToWebView, sender: self)
                 }
-            } catch ApiManagerError.invalidUrl {
-                let alertView = UIAlertController(title: "Error", message: "Invalid domain.\nCheck your input and try again.", preferredStyle: .alert)
-                alertView.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alertView, animated: true, completion: nil)
             } catch {
                 let alertView = UIAlertController(title: "Error", message: "Error occurred getting app config.\nCheck your input and try again.", preferredStyle: .alert)
                 alertView.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
