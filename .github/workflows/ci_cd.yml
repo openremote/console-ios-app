@@ -79,7 +79,6 @@ jobs:
           -sdk iphoneos \
           -configuration Release \
           -destination generic/platform=iOS \
-          -allowProvisioningUpdates \
           clean archive          
 
       # - name: Export IPA
