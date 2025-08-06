@@ -8,6 +8,14 @@ on:
     tags-ignore:
       - '*.*'
 
+  # PR
+  pull_request:
+    branches:
+      - 'main'
+
+  # Manual trigger
+  workflow_dispatch:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
