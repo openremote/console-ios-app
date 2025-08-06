@@ -24,7 +24,7 @@ jobs:
 
   build:
     name: CI/CD
-    runs-on: macos-latest
+    runs-on: macos-15 # is not the macos-latest, which should be by the end of August 2025
 
     steps:
       - name: Checkout
