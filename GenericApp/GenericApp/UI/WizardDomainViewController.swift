@@ -105,7 +105,7 @@ extension WizardDomainViewController: UITextFieldDelegate {
         Task.init {
             do {
                 configManager = ConfigManager(apiManagerFactory: { url in
-                    HttpApiManager(baseUrl: url)
+                    try HttpApiManager(baseUrl: url)
                 })
 
                 let state = try await configManager!.setDomain(domain: domain)
