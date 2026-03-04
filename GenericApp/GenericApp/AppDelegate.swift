@@ -44,11 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
 
 
         // Redirects NSLog calls to file
-        let documentsDirectory = paths[0]
-        let fileName = "\(Date()).log"
-        let logFilePath = (documentsDirectory as NSString).appendingPathComponent(fileName)
-        if let cPath = logFilePath.cString(using: .utf8) {
-            freopen(cPath, "a+", stderr)
+        if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let fileName = "\(Date()).log"
+            let logFilePath = documentsDirectory.appendingPathComponent(fileName).path
+            if let cPath = logFilePath.cString(using: .utf8) {
+                freopen(cPath, "a+", stderr)
+            }
         }
 
         if launchOptions?[UIApplication.LaunchOptionsKey.location] != nil {
