@@ -46,7 +46,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
         let documentsDirectory = paths[0]
         let fileName = "\(Date()).log"
         let logFilePath = (documentsDirectory as NSString).appendingPathComponent(fileName)
-        freopen(logFilePath.cString(using: String.Encoding.ascii)!, "a+", stderr)
+        if let cPath = logFilePath.cString(using: .utf8) {
+            freopen(cPath, "a+", stderr)
+        }
 
         if launchOptions?[UIApplication.LaunchOptionsKey.location] != nil {
             NSLog("%@", "App started from location update")
