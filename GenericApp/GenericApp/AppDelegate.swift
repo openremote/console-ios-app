@@ -42,7 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
         UNUserNotificationCenter.current().delegate = self
         // if the app was launched because of geofencing
 
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+
+        // Redirects NSLog calls to file
         let documentsDirectory = paths[0]
         let fileName = "\(Date()).log"
         let logFilePath = (documentsDirectory as NSString).appendingPathComponent(fileName)
