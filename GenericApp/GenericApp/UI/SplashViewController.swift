@@ -30,7 +30,7 @@ class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if (displaySettings) {
+        if displaySettings {
             self.performSegue(withIdentifier: Segues.goToSettingsView, sender: self)
             displaySettings = false
             return
