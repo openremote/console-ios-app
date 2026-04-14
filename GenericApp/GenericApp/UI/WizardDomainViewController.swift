@@ -51,37 +51,49 @@ class WizardDomainViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.goToWizardAppView {
-            switch configManager!.state {
-            case .selectApp(_, let apps):
-                guard let appViewController = segue.destination as? WizardAppViewController else {
-                    fatalError("Invalid state for segue")
-                }
-                appViewController.apps = apps
-                appViewController.configManager = self.configManager
-            default:
-                fatalError("Invalid state for segue")
-            }
+            prepareWizardAppViewSegue(segue)
         } else if segue.identifier == Segues.goToWizardRealmView {
-            switch configManager!.state {
-            case .selectRealm(_, _, let realms):
-                guard let realmViewController = segue.destination as? WizardRealmViewController else {
-                    fatalError("Invalid state for segue")
-                }
-                realmViewController.realms = realms
-                realmViewController.configManager = self.configManager
-            default:
-                fatalError("Invalid state for segue")
-            }
+            prepareWizardRealmViewSegue(segue)
         } else if segue.identifier == Segues.goToWebView {
-            switch configManager!.state {
-            case .complete(let project):
-                guard let orViewController = segue.destination as? ORViewcontroller else {
-                    fatalError("Invalid state for segue")
-                }
-                orViewController.targetUrl = project.targetUrl
-            default:
+            prepareWebViewSegue(segue)
+        }
+    }
+
+    private func prepareWizardAppViewSegue(_ segue: UIStoryboardSegue) {
+        switch configManager!.state {
+        case .selectApp(_, let apps):
+            guard let appViewController = segue.destination as? WizardAppViewController else {
                 fatalError("Invalid state for segue")
             }
+            appViewController.apps = apps
+            appViewController.configManager = self.configManager
+        default:
+            fatalError("Invalid state for segue")
+        }
+    }
+
+    private func prepareWizardRealmViewSegue(_ segue: UIStoryboardSegue) {
+        switch configManager!.state {
+        case .selectRealm(_, _, let realms):
+            guard let realmViewController = segue.destination as? WizardRealmViewController else {
+                fatalError("Invalid state for segue")
+            }
+            realmViewController.realms = realms
+            realmViewController.configManager = self.configManager
+        default:
+            fatalError("Invalid state for segue")
+        }
+    }
+
+    private func prepareWebViewSegue(_ segue: UIStoryboardSegue) {
+        switch configManager!.state {
+        case .complete(let project):
+            guard let orViewController = segue.destination as? ORViewcontroller else {
+                fatalError("Invalid state for segue")
+            }
+            orViewController.targetUrl = project.targetUrl
+        default:
+            fatalError("Invalid state for segue")
         }
     }
 
