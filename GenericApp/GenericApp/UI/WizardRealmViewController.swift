@@ -60,7 +60,7 @@ class WizardRealmViewController: UIViewController {
             // The list of items to display. Can be changed dynamically
             dropDown.dataSource = realms
 
-            dropDown.selectionAction = { [weak self] (index, item) in
+            dropDown.selectionAction = { [weak self] (_, item) in
                 self?.realmsSelectionButton.setTitle(item, for: .normal)
             }
 

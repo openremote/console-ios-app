@@ -60,7 +60,7 @@ class WizardAppViewController: UIViewController {
             // The list of items to display. Can be changed dynamically
             dropDown.dataSource = apps
 
-            dropDown.selectionAction = { [weak self] (index, item) in
+            dropDown.selectionAction = { [weak self] (_, item) in
                 self?.appsSelectionButton.setTitle(item, for: .normal)
             }
 

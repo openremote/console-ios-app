@@ -238,7 +238,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                                 request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                                             }
                                             let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
-                                            let reqDataTask = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+                                            let reqDataTask = session.dataTask(with: request as URLRequest, completionHandler: { _, _, error in
                                                 if error != nil {
                                                     NSLog("error %@", (error! as NSError).localizedDescription)
                                                 }
