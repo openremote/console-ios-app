@@ -104,7 +104,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
         Messaging.messaging().apnsToken = deviceToken
     }
 
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if let action = userInfo[DefaultsKey.actionKey] as? String {
             if action == Actions.geofenceRefresh {
                 if let controllerGeofenceProvider = (self.window?.topController as? ORViewcontroller)?.geofenceProvider {
@@ -138,7 +140,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
         completionHandler(UIBackgroundFetchResult.newData)
     }
 
-    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func urlSession(_ session: URLSession,
+                    didReceive challenge: URLAuthenticationChallenge,
+                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
             completionHandler(.performDefaultHandling, nil)
         }
@@ -147,14 +151,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         var notificationId: Int64? = nil
 
         if let notificationIdString = userInfo[ActionType.notificationId] as? String {
             notificationId = Int64(notificationIdString)
         }
-        if let notiId = notificationId, let defaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement), let consoleId = defaults.string(forKey: GeofenceProvider.consoleIdKey) {
+        if let notiId = notificationId,
+           let defaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement),
+           let consoleId = defaults.string(forKey: GeofenceProvider.consoleIdKey) {
             ORNotificationResource.sharedInstance.notificationDelivered(notificationId: notiId, targetId: consoleId)
         }
 
@@ -162,8 +170,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 
     // swiftlint:disable:next cyclomatic_complexity
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         var notificationId: Int64? = nil
         var consoleId: String?
