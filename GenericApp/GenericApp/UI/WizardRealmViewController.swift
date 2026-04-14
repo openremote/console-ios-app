@@ -179,7 +179,7 @@ extension WizardRealmViewController: UITextFieldDelegate {
             return false
         }
 
-        if textField == realmTextInput.textField, let realm = realmName {
+        if textField == realmTextInput.textField, realmName != nil {
             realmTextInput.textField.resignFirstResponder()
 //            requestAppConfig(domain)
         }
