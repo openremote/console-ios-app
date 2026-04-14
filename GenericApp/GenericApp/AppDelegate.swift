@@ -227,43 +227,41 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             if let buttonsString = userInfo[DefaultsKey.buttonsKey] as? String {
                 if let buttonsData = buttonsString.data(using: .utf8) {
                     if let buttons = try? JSONDecoder().decode([ORPushNotificationButton].self, from: buttonsData) {
-                        for button in buttons {
-                            if button.title == response.actionIdentifier {
-                                if let action = button.action {
-                                    var urlRequest: URL?
-                                    if action.url.hasPrefix("http") || action.url.hasPrefix("https") {
-                                        urlRequest = URL(string: action.url)
-                                    } else {
-                                        if let url = project?.baseURL {
-                                            urlRequest = URL(string: "\(url)/console/\(action.url)")
-                                        }
-                                    }
-                                    if let url = urlRequest {
-                                        if action.silent {
-                                            let request = NSMutableURLRequest(url: url)
-                                            request.httpMethod = action.httpMethod ?? "GET"
-                                            if let body = action.data {
-                                                request.httpBody = body.data(using: .utf8)
-                                                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                                            }
-                                            let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
-                                            let reqDataTask = session.dataTask(with: request as URLRequest, completionHandler: { _, _, error in
-                                                if error != nil {
-                                                    NSLog("error %@", (error! as NSError).localizedDescription)
-                                                }
-                                            })
-                                            reqDataTask.resume()
-                                        } else if action.openInBrowser {
-                                            NSLog("%@", " in browser: \(url)")
-                                            UIApplication.shared.open(url)
-                                        } else {
-                                            NSLog("%@", " in app: \(url)")
-                                            (self.window?.topController as? ORViewcontroller)?.loadURL(url: url)
-                                        }
+                        for button in buttons where button.title == response.actionIdentifier {
+                            if let action = button.action {
+                                var urlRequest: URL?
+                                if action.url.hasPrefix("http") || action.url.hasPrefix("https") {
+                                    urlRequest = URL(string: action.url)
+                                } else {
+                                    if let url = project?.baseURL {
+                                        urlRequest = URL(string: "\(url)/console/\(action.url)")
                                     }
                                 }
-                                break
+                                if let url = urlRequest {
+                                    if action.silent {
+                                        let request = NSMutableURLRequest(url: url)
+                                        request.httpMethod = action.httpMethod ?? "GET"
+                                        if let body = action.data {
+                                            request.httpBody = body.data(using: .utf8)
+                                            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                                        }
+                                        let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+                                        let reqDataTask = session.dataTask(with: request as URLRequest, completionHandler: { _, _, error in
+                                            if error != nil {
+                                                NSLog("error %@", (error! as NSError).localizedDescription)
+                                            }
+                                        })
+                                        reqDataTask.resume()
+                                    } else if action.openInBrowser {
+                                        NSLog("%@", " in browser: \(url)")
+                                        UIApplication.shared.open(url)
+                                    } else {
+                                        NSLog("%@", " in app: \(url)")
+                                        (self.window?.topController as? ORViewcontroller)?.loadURL(url: url)
+                                    }
+                                }
                             }
+                            break
                         }
                     }
                 }
