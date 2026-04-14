@@ -21,7 +21,7 @@ import Foundation
 import UIKit
 
 extension String {
-    func isUrl () -> Bool {
+    func isUrl() -> Bool {
         if let url = NSURL(string: self) {
             return UIApplication.shared.canOpenURL(url as URL)
         }

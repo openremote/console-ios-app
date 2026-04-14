@@ -45,7 +45,7 @@ class SplashViewController: UIViewController {
                 print("Known projects \(projects)")
                 print("Selected project \(selectedProjectId)")
 
-                if let selectedProject = projects.first(where: { $0.id == selectedProjectId } ) {
+                if let selectedProject = projects.first(where: { $0.id == selectedProjectId }) {
                     project = selectedProject
                     self.performSegue(withIdentifier: Segues.goToWebView, sender: self)
                     return

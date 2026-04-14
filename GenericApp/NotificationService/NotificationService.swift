@@ -34,7 +34,7 @@ class NotificationService: UNNotificationServiceExtension {
             let categoryName = "openremoteNotification"
             bestAttemptContent.categoryIdentifier = categoryName
 
-            //Buttons
+            // Buttons
             if let buttonsString = bestAttemptContent.userInfo[DefaultsKey.buttonsKey] as? String {
                 if let buttonsData = buttonsString.data(using: .utf8) {
                     if let buttons = try? JSONDecoder().decode([ORPushNotificationButton].self, from: buttonsData) {
@@ -55,9 +55,9 @@ class NotificationService: UNNotificationServiceExtension {
                     }
                 }
             }
-            //Actions
+            // Actions
             if let actionString = bestAttemptContent.userInfo[DefaultsKey.actionKey] as? String {
-                if let actionsData = actionString.data(using: .utf8){
+                if let actionsData = actionString.data(using: .utf8) {
                     if let action = try? JSONDecoder().decode(ORPushNotificationAction.self, from: actionsData) {
 
                         bestAttemptContent.userInfo[ActionType.appUrl] = action.url
@@ -84,9 +84,9 @@ class NotificationService: UNNotificationServiceExtension {
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         NSLog("NotifExtension Time has expired")
         if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
-            //Actions
+            // Actions
             if let actionString = bestAttemptContent.userInfo[DefaultsKey.actionKey] as? String {
-                if let actionsData = actionString.data(using: .utf8){
+                if let actionsData = actionString.data(using: .utf8) {
                     if let action = try? JSONDecoder().decode(ORPushNotificationAction.self, from: actionsData) {
 
                         bestAttemptContent.userInfo[ActionType.appUrl] = action.url

@@ -151,7 +151,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let userInfo = notification.request.content.userInfo
         var notificationId: Int64? = nil
 
-        if let notificationIdString = userInfo[ActionType.notificationId] as? String{
+        if let notificationIdString = userInfo[ActionType.notificationId] as? String {
             notificationId = Int64(notificationIdString)
         }
         if let notiId = notificationId, let defaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement), let consoleId = defaults.string(forKey: GeofenceProvider.consoleIdKey) {
@@ -169,7 +169,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         var consoleId: String?
         var project: ProjectConfig?
 
-        if let notificationIdString = userInfo[ActionType.notificationId] as? String{
+        if let notificationIdString = userInfo[ActionType.notificationId] as? String {
             notificationId = Int64(notificationIdString)
         }
 
@@ -196,7 +196,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                         urlRequest = URL(string: "\(url)/console/\(urlTo)")
                     }
                 }
-                if let url = urlRequest{
+                if let url = urlRequest {
                     if let inBrowser = userInfo[ActionType.openInBrowser] as? Bool, inBrowser {
                         NSLog("%@", " in browser: \(url)")
                         UIApplication.shared.open(url)
@@ -267,7 +267,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
-        if let defaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement){
+        if let defaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement) {
             defaults.set(fcmToken, forKey: DefaultsKey.fcmTokenKey)
             defaults.synchronize()
         }
