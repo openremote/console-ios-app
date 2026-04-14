@@ -53,7 +53,9 @@ class WizardDomainViewController: UIViewController {
         if segue.identifier == Segues.goToWizardAppView {
             switch configManager!.state {
             case .selectApp(_, let apps):
-                let appViewController = segue.destination as! WizardAppViewController
+                guard let appViewController = segue.destination as? WizardAppViewController else {
+                    fatalError("Invalid state for segue")
+                }
                 appViewController.apps = apps
                 appViewController.configManager = self.configManager
             default:
@@ -62,17 +64,20 @@ class WizardDomainViewController: UIViewController {
         } else if segue.identifier == Segues.goToWizardRealmView {
             switch configManager!.state {
             case .selectRealm(_, _, let realms):
-                let realmViewController = segue.destination as! WizardRealmViewController
+                guard let realmViewController = segue.destination as? WizardRealmViewController else {
+                    fatalError("Invalid state for segue")
+                }
                 realmViewController.realms = realms
                 realmViewController.configManager = self.configManager
             default:
                 fatalError("Invalid state for segue")
             }
         } else if segue.identifier == Segues.goToWebView {
-            let orViewController = segue.destination as! ORViewcontroller
-            
             switch configManager!.state {
             case .complete(let project):
+                guard let orViewController = segue.destination as? ORViewcontroller else {
+                    fatalError("Invalid state for segue")
+                }
                 orViewController.targetUrl = project.targetUrl
             default:
                 fatalError("Invalid state for segue")
@@ -91,8 +96,8 @@ extension WizardDomainViewController: UITextFieldDelegate {
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == domainTextInput.textField {
-            if let s = domainTextInput.textField.text {
-                domainName = s.replacingCharacters(in: Range(range, in: s)!, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
+            if let originalString = domainTextInput.textField.text {
+                domainName = originalString.replacingCharacters(in: Range(range, in: originalString)!, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
                 nextButton.isEnabled = !(domainName?.isEmpty ?? true)
             } else {
                 nextButton.isEnabled = false

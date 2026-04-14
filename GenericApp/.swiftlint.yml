@@ -1,0 +1,4 @@
+disabled_rules:
+  - trailing_comma
+  - blanket_disable_command
+line_length: 180

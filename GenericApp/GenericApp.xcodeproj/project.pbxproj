@@ -196,6 +196,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 878D2D1D249A490400011484 /* Build configuration list for PBXNativeTarget "GenericApp" */;
 			buildPhases = (
+				917687E22F8E939C00D977BD /* SwiftLint */,
 				878D2D05249A490300011484 /* Sources */,
 				878D2D06249A490300011484 /* Frameworks */,
 				878D2D07249A490300011484 /* Resources */,
@@ -218,6 +219,7 @@
 				878D2D20249A498900011484 /* Sources */,
 				878D2D21249A498900011484 /* Frameworks */,
 				878D2D22249A498900011484 /* Resources */,
+				917687E32F8E94E100D977BD /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -292,6 +294,53 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		917687E22F8E939C00D977BD /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/GenericApp",
+				"$(SRCROOT)/.swiftlint.yml",
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\n\nif [ \"${CI}\" = \"true\" ] || [ \"${GITHUB_ACTIONS}\" = \"true\" ]; then\n  echo \"Skipping Xcode SwiftLint phase in CI.\"\n  exit 0\nfi\n\nif command -v swiftlint >/dev/null; then\n  swiftlint lint --no-cache --config \"${SRCROOT}/.swiftlint.yml\" --reporter xcode \"${SRCROOT}/GenericApp\" || true\nelse\n  echo \"warning: SwiftLint not installed. Run 'brew install swiftlint' to enable local linting.\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		917687E32F8E94E100D977BD /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/NotificationService",
+				"$(SRCROOT)/.swiftlint.yml",
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\n\nif [ \"${CI}\" = \"true\" ] || [ \"${GITHUB_ACTIONS}\" = \"true\" ]; then\n  echo \"Skipping Xcode SwiftLint phase in CI.\"\n  exit 0\nfi\n\nif command -v swiftlint >/dev/null; then\n  swiftlint lint --no-cache --config \"${SRCROOT}/.swiftlint.yml\" --reporter xcode \"${SRCROOT}/NotificationService\" || true\nelse\n  echo \"warning: SwiftLint not installed. Run 'brew install swiftlint' to enable local linting.\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		878D2D05249A490300011484 /* Sources */ = {

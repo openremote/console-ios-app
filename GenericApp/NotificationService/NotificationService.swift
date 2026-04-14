@@ -75,7 +75,7 @@ class NotificationService: UNNotificationServiceExtension {
                 }
             }
 
-            contentHandler(bestAttemptContent.copy() as! UNNotificationContent)
+            contentHandler(bestAttemptContent.copy() as! UNNotificationContent) // swiftlint:disable:this force_cast
         }
     }
 

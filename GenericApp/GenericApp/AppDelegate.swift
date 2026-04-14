@@ -164,6 +164,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         completionHandler([.banner, .sound])
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
 
         let userInfo = response.notification.request.content.userInfo
@@ -199,7 +200,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                     }
                 }
                 if let url = urlRequest{
-                    if let InBrowser = userInfo[ActionType.openInBrowser] as? Bool, InBrowser {
+                    if let inBrowser = userInfo[ActionType.openInBrowser] as? Bool, inBrowser {
                         NSLog("%@", " in browser: \(url)")
                         UIApplication.shared.open(url)
                     } else {

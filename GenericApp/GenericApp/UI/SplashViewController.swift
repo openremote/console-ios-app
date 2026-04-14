@@ -57,8 +57,10 @@ class SplashViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.goToWebView {
-            let orViewController = segue.destination as! ORViewcontroller
-            
+            guard let orViewController = segue.destination as? ORViewcontroller else {
+                fatalError("Invalid state for segue")
+            }
+
             if let project = project {
   
                 // TODO: replace with proper URL creation

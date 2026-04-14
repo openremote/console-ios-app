@@ -80,17 +80,20 @@ class WizardAppViewController: UIViewController {
         if segue.identifier == Segues.goToWizardRealmView {
             switch configManager!.state {
             case .selectRealm(_, _, let realms):
-                let realmViewController = segue.destination as! WizardRealmViewController
+                guard let realmViewController = segue.destination as? WizardRealmViewController else {
+                    fatalError("Invalid state for segue")
+                }
                 realmViewController.realms = realms
                 realmViewController.configManager = self.configManager
             default:
                 fatalError("Invalid state for segue")
             }
         } else if segue.identifier == Segues.goToWebView {
-            let orViewController = segue.destination as! ORViewcontroller
-            
             switch configManager!.state {
             case .complete(let project):
+                guard let orViewController = segue.destination as? ORViewcontroller else {
+                    fatalError("Invalid state for segue")
+                }
                 orViewController.targetUrl = project.targetUrl
             default:
                 fatalError("Invalid state for segue")
@@ -133,8 +136,8 @@ extension WizardAppViewController: UITextFieldDelegate {
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == appTextInput.textField {
-            if let s = appTextInput.textField.text {
-                appName = s.replacingCharacters(in: Range(range, in: s)!, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
+            if let originalString = appTextInput.textField.text {
+                appName = originalString.replacingCharacters(in: Range(range, in: originalString)!, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
             }
         }
         return true

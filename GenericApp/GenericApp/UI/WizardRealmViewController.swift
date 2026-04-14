@@ -80,10 +80,11 @@ class WizardRealmViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.goToWebView {
-            let orViewController = segue.destination as! ORViewcontroller
-            
             switch configManager!.state {
             case .complete(let project):
+                guard let orViewController = segue.destination as? ORViewcontroller else {
+                    fatalError("Invalid state for segue")
+                }
                 orViewController.targetUrl = project.targetUrl
             default:
                 fatalError("We should never come to this screen in that state")
@@ -146,8 +147,8 @@ extension WizardRealmViewController: UITextFieldDelegate {
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == realmTextInput.textField {
-            if let s = realmTextInput.textField.text {
-                realmName = s.replacingCharacters(in: Range(range, in: s)!, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
+            if let originalString = realmTextInput.textField.text {
+                realmName = originalString.replacingCharacters(in: Range(range, in: originalString)!, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
             }
         }
 

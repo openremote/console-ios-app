@@ -68,7 +68,9 @@ class SettingsViewController: UITableViewController {
    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell: ProjectTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ProjectCell", for: indexPath) as! ProjectTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectCell", for: indexPath) as? ProjectTableViewCell else {
+                fatalError("Invalid table view cell")
+            }
             let project = projects[indexPath.row]
             cell.setProject(project)
             cell.accessoryType = project.id == selectedProjectId ? .checkmark : .none
