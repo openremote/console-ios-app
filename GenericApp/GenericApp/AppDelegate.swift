@@ -155,7 +155,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
-        var notificationId: Int64? = nil
+        var notificationId: Int64?
 
         if let notificationIdString = userInfo[ActionType.notificationId] as? String {
             notificationId = Int64(notificationIdString)
@@ -174,7 +174,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        var notificationId: Int64? = nil
+        var notificationId: Int64?
         var consoleId: String?
         var project: ProjectConfig?
 
