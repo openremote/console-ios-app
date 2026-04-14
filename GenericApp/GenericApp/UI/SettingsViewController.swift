@@ -113,7 +113,7 @@ class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        if let currentlySelectedProject = projects.first(where:{ $0.id == selectedProjectId }),
+        if let currentlySelectedProject = projects.first(where: { $0.id == selectedProjectId }),
            let cellIndex = projects.firstIndex(of: currentlySelectedProject),
            let previousCell = tableView.cellForRow(at: IndexPath(row: cellIndex, section: indexPath.section)) {
                 previousCell.accessoryType = .none

@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
     var window: UIWindow?
     let gcmMessageIDKey = "gcm.message_id"
 
-    var geofenceProvider : GeofenceProvider?
+    var geofenceProvider: GeofenceProvider?
     var fcmToken: String?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -104,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
         Messaging.messaging().apnsToken = deviceToken
     }
 
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if let action = userInfo[DefaultsKey.actionKey] as? String {
             if action == Actions.geofenceRefresh {
                 if let controllerGeofenceProvider = (self.window?.topController as? ORViewcontroller)?.geofenceProvider {
@@ -145,11 +145,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
     }
 }
 
-extension AppDelegate : UNUserNotificationCenterDelegate {
+extension AppDelegate: UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
-        var notificationId : Int64? = nil
+        var notificationId: Int64? = nil
 
         if let notificationIdString = userInfo[ActionType.notificationId] as? String{
             notificationId = Int64(notificationIdString)
@@ -165,8 +165,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
 
         let userInfo = response.notification.request.content.userInfo
-        var notificationId : Int64? = nil
-        var consoleId : String?
+        var notificationId: Int64? = nil
+        var consoleId: String?
         var project: ProjectConfig?
 
         if let notificationIdString = userInfo[ActionType.notificationId] as? String{
@@ -179,7 +179,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
             let selectedProjectId = userDefaults.string(forKey: DefaultsKey.projectKey)
             if let projectsData = userDefaults.data(forKey: DefaultsKey.projectsConfigurationKey) {
                 let projects = (try? JSONDecoder().decode([ProjectConfig].self, from: projectsData)) ?? []
-                project = projects.first(where:{ $0.id == selectedProjectId })
+                project = projects.first(where: { $0.id == selectedProjectId })
             }
         }
 
@@ -190,7 +190,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
             if let urlTo = userInfo[ActionType.appUrl] as? String, !urlTo.isEmpty {
                 var urlRequest: URL?
                 if urlTo.hasPrefix("http") || urlTo.hasPrefix("https") {
-                    urlRequest = URL(string:urlTo)
+                    urlRequest = URL(string: urlTo)
                 } else {
                     if let url = project?.baseURL {
                         urlRequest = URL(string: "\(url)/console/\(urlTo)")
@@ -202,7 +202,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                         UIApplication.shared.open(url)
                     } else {
                         NSLog("%@", " in app: \(url)")
-                        (self.window?.topController as? ORViewcontroller)?.loadURL(url:url)
+                        (self.window?.topController as? ORViewcontroller)?.loadURL(url: url)
                     }
                 }
             }
@@ -211,7 +211,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
             if let notiId = notificationId, let conId = consoleId {
                 ORNotificationResource.sharedInstance.notificationAcknowledged(notificationId: notiId, targetId: conId, acknowledgement: response.actionIdentifier)
             }
-        default :
+        default:
             if let notiId = notificationId, let conId = consoleId {
                 ORNotificationResource.sharedInstance.notificationAcknowledged(notificationId: notiId, targetId: conId, acknowledgement: response.actionIdentifier)
             }
@@ -223,7 +223,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                 if let action = button.action {
                                     var urlRequest: URL?
                                     if action.url.hasPrefix("http") || action.url.hasPrefix("https") {
-                                        urlRequest = URL(string:action.url)
+                                        urlRequest = URL(string: action.url)
                                     } else {
                                         if let url = project?.baseURL {
                                             urlRequest = URL(string: "\(url)/console/\(action.url)")
@@ -237,8 +237,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                                 request.httpBody = body.data(using: .utf8)
                                                 request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                                             }
-                                            let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue : nil)
-                                            let reqDataTask = session.dataTask(with: request as URLRequest, completionHandler:{ data, response, error in
+                                            let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+                                            let reqDataTask = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
                                                 if (error != nil) {
                                                     NSLog("error %@", (error! as NSError).localizedDescription)
                                                 }
@@ -249,7 +249,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                             UIApplication.shared.open(url)
                                         } else {
                                             NSLog("%@", " in app: \(url)")
-                                            (self.window?.topController as? ORViewcontroller)?.loadURL(url:url)
+                                            (self.window?.topController as? ORViewcontroller)?.loadURL(url: url)
                                         }
                                     }
                                 }
@@ -264,7 +264,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     }
 }
 
-extension AppDelegate : MessagingDelegate {
+extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
         if let defaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement){

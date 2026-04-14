@@ -50,7 +50,7 @@ class NotificationService: UNNotificationServiceExtension {
                         }
 
                         let category = UNNotificationCategory(identifier: categoryName, actions: notificationActions, intentIdentifiers: [], options: [])
-                        let categories : Set = [category]
+                        let categories: Set = [category]
                         UNUserNotificationCenter.current().setNotificationCategories(categories)
                     }
                 }
