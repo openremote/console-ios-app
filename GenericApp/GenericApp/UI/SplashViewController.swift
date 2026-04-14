@@ -24,12 +24,12 @@ class SplashViewController: UIViewController {
 
     var host: String?
     var project: ProjectConfig?
-    
+
     var displaySettings = false
-   
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         if (displaySettings) {
             self.performSegue(withIdentifier: Segues.goToSettingsView, sender: self)
             displaySettings = false
@@ -38,13 +38,13 @@ class SplashViewController: UIViewController {
         if let userDefaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement),
            let projectsData = userDefaults.data(forKey: DefaultsKey.projectsConfigurationKey),
            let selectedProjectId = userDefaults.string(forKey: DefaultsKey.projectKey) {
-            
+
             let projects = try? JSONDecoder().decode([ProjectConfig].self, from: projectsData)
-            
+
             if let projects = projects {
                 print("Known projects \(projects)")
                 print("Selected project \(selectedProjectId)")
-                
+
                 if let selectedProject = projects.first(where: { $0.id == selectedProjectId } ) {
                     project = selectedProject
                     self.performSegue(withIdentifier: Segues.goToWebView, sender: self)
@@ -62,7 +62,7 @@ class SplashViewController: UIViewController {
             }
 
             if let project = project {
-  
+
                 // TODO: replace with proper URL creation
                 orViewController.targetUrl = project.targetUrl
 

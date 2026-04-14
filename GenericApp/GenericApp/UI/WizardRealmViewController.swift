@@ -21,19 +21,18 @@ import UIKit
 import ORLib
 import DropDown
 
-
 class WizardRealmViewController: UIViewController {
-    
+
     var configManager: ConfigManager?
 
     var realms: [String]?
 
     var realmName: String?
-    
+
     @IBOutlet weak var realmTextInput: ORTextInput!
     @IBOutlet weak var nextButton: ORRaisedButton!
     @IBOutlet weak var boxView: UIView!
-    
+
     @IBOutlet weak var realmsSelectionButton: UIButton!
     var dropDown = DropDown()
 
@@ -55,7 +54,7 @@ class WizardRealmViewController: UIViewController {
         realmTextInput.textField.autocorrectionType = .no
         realmTextInput.textField.autocapitalizationType = .none
         realmTextInput.textField.returnKeyType = .next
-        
+
         if let realms = realms {
             dropDown.anchorView = realmsSelectionButton
             // The list of items to display. Can be changed dynamically
@@ -64,7 +63,7 @@ class WizardRealmViewController: UIViewController {
             dropDown.selectionAction = { [weak self] (index, item) in
                 self?.realmsSelectionButton.setTitle(item, for: .normal)
             }
-            
+
             realmsSelectionButton.isHidden = false
             realmTextInput.isHidden = true
         } else {
@@ -73,7 +72,7 @@ class WizardRealmViewController: UIViewController {
         }
 
     }
-    
+
     @IBAction func selectRealm(_ sender: AnyObject) {
             dropDown.show()
         }
@@ -89,24 +88,18 @@ class WizardRealmViewController: UIViewController {
             default:
                 fatalError("We should never come to this screen in that state")
             }
-            
-            
+
             // TODO: based on configManager?.appInfos retrieve providers -> this is done by selectRealm on ConfigMgr
-            
-            
-            
+
 //            orViewController.targetUrl = "https://demo.openremote.io/manager/?realm=smartcity&consoleProviders=geofence push storage&consoleAutoEnable=true#!geofences"
         }
     }
-    
+
     @IBAction func nextButtonpressed(_ sender: UIButton) {
-        
         // TODO: handle errors and have a proper error message
-        
-            
+
         // TODO: handle the case realm is selected from menu
-        
-            
+
         let state = try? configManager!.setRealm(realm: realmName)
         switch state {
         case let .complete(project):
@@ -131,10 +124,8 @@ class WizardRealmViewController: UIViewController {
             break // Fall through to error message
         }
 
-
         // If we reached here, an error occured
-        
-        
+
         // TODO: proper error message
         let alertView = UIAlertController(title: "Error", message: "TODO", preferredStyle: .alert)
         alertView.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

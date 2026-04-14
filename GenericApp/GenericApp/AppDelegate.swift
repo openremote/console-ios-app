@@ -36,12 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
         UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "or_green") as Any], for: .normal)
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(named: "or_green") as Any]
         UIBarButtonItem.appearance().tintColor = UIColor(named: "or_green")
-        
+
         IQKeyboardManager.shared.isEnabled = true
 
         UNUserNotificationCenter.current().delegate = self
         // if the app was launched because of geofencing
-
 
         // Redirects NSLog calls to file
         if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
@@ -87,11 +86,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, URLSessionDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-       
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -175,10 +172,10 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         if let notificationIdString = userInfo[ActionType.notificationId] as? String{
             notificationId = Int64(notificationIdString)
         }
-        
+
         if let userDefaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement) {
             consoleId = userDefaults.string(forKey: GeofenceProvider.consoleIdKey) // TODO: geofence provider should also be adapted to store "per project"
-            
+
             let selectedProjectId = userDefaults.string(forKey: DefaultsKey.projectKey)
             if let projectsData = userDefaults.data(forKey: DefaultsKey.projectsConfigurationKey) {
                 let projects = (try? JSONDecoder().decode([ProjectConfig].self, from: projectsData)) ?? []

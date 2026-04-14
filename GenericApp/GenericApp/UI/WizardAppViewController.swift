@@ -32,7 +32,7 @@ class WizardAppViewController: UIViewController {
     @IBOutlet weak var appTextInput: ORTextInput!
     @IBOutlet weak var nextButton: ORRaisedButton!
     @IBOutlet weak var boxView: UIView!
-    
+
     @IBOutlet weak var appsSelectionButton: UIButton!
     var dropDown = DropDown()
 
@@ -43,7 +43,7 @@ class WizardAppViewController: UIViewController {
 
         nextButton.backgroundColor = orGreenColor
         nextButton.tintColor = UIColor.white
-        
+
         boxView.layer.cornerRadius = 10
     }
 
@@ -54,7 +54,7 @@ class WizardAppViewController: UIViewController {
         appTextInput.textField.autocorrectionType = .no
         appTextInput.textField.autocapitalizationType = .none
         appTextInput.textField.returnKeyType = .next
-        
+
         if let apps = apps {
             dropDown.anchorView = appsSelectionButton
             // The list of items to display. Can be changed dynamically
@@ -63,7 +63,7 @@ class WizardAppViewController: UIViewController {
             dropDown.selectionAction = { [weak self] (index, item) in
                 self?.appsSelectionButton.setTitle(item, for: .normal)
             }
-            
+
             appsSelectionButton.isHidden = false
             appTextInput.isHidden = true
         } else {
@@ -75,7 +75,7 @@ class WizardAppViewController: UIViewController {
     @IBAction func selectApp(_ sender: AnyObject) {
             dropDown.show()
         }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.goToWizardRealmView {
             switch configManager!.state {
@@ -104,7 +104,7 @@ class WizardAppViewController: UIViewController {
     @IBAction func nextButtonpressed(_ sender: UIButton) {
         selectApp()
     }
-    
+
     private func selectApp() {
         let selectedApp: String?
         if apps != nil {
@@ -116,12 +116,9 @@ class WizardAppViewController: UIViewController {
         if let selectedApp = selectedApp {
             print("Selected app >\(selectedApp)<")
             _ = try? configManager!.setApp(app: selectedApp)
-            
-            
-            
+
             // TODO: check state, can we go to some other screen ?
-            
-            
+
             self.performSegue(withIdentifier: Segues.goToWizardRealmView, sender: self)
         } else {
             let alertView = UIAlertController(title: "Error", message: "Please \(apps != nil ? "select" : "enter") an application", preferredStyle: .alert)
@@ -131,7 +128,7 @@ class WizardAppViewController: UIViewController {
         }
     }
 }
- 
+
 extension WizardAppViewController: UITextFieldDelegate {
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

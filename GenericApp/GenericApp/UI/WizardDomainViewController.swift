@@ -29,7 +29,7 @@ class WizardDomainViewController: UIViewController {
     @IBOutlet weak var domainTextInput: ORTextInput!
     @IBOutlet weak var nextButton: ORRaisedButton!
     @IBOutlet var boxView: UIView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -48,7 +48,7 @@ class WizardDomainViewController: UIViewController {
         domainTextInput.textField.autocapitalizationType = .none
         domainTextInput.textField.returnKeyType = .next
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.goToWizardAppView {
             switch configManager!.state {

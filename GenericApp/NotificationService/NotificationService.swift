@@ -21,7 +21,7 @@ import UserNotifications
 import ORLib
 
 class NotificationService: UNNotificationServiceExtension {
-    
+
     public var contentHandler: ((UNNotificationContent) -> Void)?
     public var bestAttemptContent: UNMutableNotificationContent?
 
@@ -78,7 +78,6 @@ class NotificationService: UNNotificationServiceExtension {
             contentHandler(bestAttemptContent.copy() as! UNNotificationContent) // swiftlint:disable:this force_cast
         }
     }
-
 
     open override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.

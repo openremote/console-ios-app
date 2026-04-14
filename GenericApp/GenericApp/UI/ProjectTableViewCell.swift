@@ -20,15 +20,14 @@
 import UIKit
 import ORLib
 
-
 class ProjectTableViewCell: UITableViewCell {
-    
+
     @IBOutlet weak var domainLabel: UILabel!
     @IBOutlet weak var appLabel: UILabel!
     @IBOutlet weak var realmLabel: UILabel!
 
     var project: ProjectConfig?
-    
+
     func setProject(_ project: ProjectConfig) {
         self.project = project
         domainLabel.text = project.domain
