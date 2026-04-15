@@ -32,7 +32,7 @@ class WizardAppViewController: UIViewController {
     @IBOutlet weak var appTextInput: ORTextInput!
     @IBOutlet weak var nextButton: ORRaisedButton!
     @IBOutlet weak var boxView: UIView!
-    
+
     @IBOutlet weak var appsSelectionButton: UIButton!
     var dropDown = DropDown()
 
@@ -43,7 +43,7 @@ class WizardAppViewController: UIViewController {
 
         nextButton.backgroundColor = orGreenColor
         nextButton.tintColor = UIColor.white
-        
+
         boxView.layer.cornerRadius = 10
     }
 
@@ -54,16 +54,16 @@ class WizardAppViewController: UIViewController {
         appTextInput.textField.autocorrectionType = .no
         appTextInput.textField.autocapitalizationType = .none
         appTextInput.textField.returnKeyType = .next
-        
+
         if let apps = apps {
             dropDown.anchorView = appsSelectionButton
             // The list of items to display. Can be changed dynamically
             dropDown.dataSource = apps
 
-            dropDown.selectionAction = { [weak self] (index, item) in
+            dropDown.selectionAction = { [weak self] (_, item) in
                 self?.appsSelectionButton.setTitle(item, for: .normal)
             }
-            
+
             appsSelectionButton.isHidden = false
             appTextInput.isHidden = true
         } else {
@@ -75,22 +75,25 @@ class WizardAppViewController: UIViewController {
     @IBAction func selectApp(_ sender: AnyObject) {
             dropDown.show()
         }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.goToWizardRealmView {
             switch configManager!.state {
             case .selectRealm(_, _, let realms):
-                let realmViewController = segue.destination as! WizardRealmViewController
+                guard let realmViewController = segue.destination as? WizardRealmViewController else {
+                    fatalError("Invalid state for segue")
+                }
                 realmViewController.realms = realms
                 realmViewController.configManager = self.configManager
             default:
                 fatalError("Invalid state for segue")
             }
         } else if segue.identifier == Segues.goToWebView {
-            let orViewController = segue.destination as! ORViewcontroller
-            
             switch configManager!.state {
             case .complete(let project):
+                guard let orViewController = segue.destination as? ORViewcontroller else {
+                    fatalError("Invalid state for segue")
+                }
                 orViewController.targetUrl = project.targetUrl
             default:
                 fatalError("Invalid state for segue")
@@ -101,7 +104,7 @@ class WizardAppViewController: UIViewController {
     @IBAction func nextButtonpressed(_ sender: UIButton) {
         selectApp()
     }
-    
+
     private func selectApp() {
         let selectedApp: String?
         if apps != nil {
@@ -113,12 +116,9 @@ class WizardAppViewController: UIViewController {
         if let selectedApp = selectedApp {
             print("Selected app >\(selectedApp)<")
             _ = try? configManager!.setApp(app: selectedApp)
-            
-            
-            
+
             // TODO: check state, can we go to some other screen ?
-            
-            
+
             self.performSegue(withIdentifier: Segues.goToWizardRealmView, sender: self)
         } else {
             let alertView = UIAlertController(title: "Error", message: "Please \(apps != nil ? "select" : "enter") an application", preferredStyle: .alert)
@@ -128,13 +128,13 @@ class WizardAppViewController: UIViewController {
         }
     }
 }
- 
+
 extension WizardAppViewController: UITextFieldDelegate {
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == appTextInput.textField {
-            if let s = appTextInput.textField.text {
-                appName = s.replacingCharacters(in: Range(range, in: s)!, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
+            if let originalString = appTextInput.textField.text {
+                appName = originalString.replacingCharacters(in: Range(range, in: originalString)!, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
             }
         }
         return true

@@ -21,10 +21,10 @@ import UIKit
 import ORLib
 
 class SettingsViewController: UITableViewController {
-  
+
     private var projects = [ProjectConfig]()
     private var selectedProjectId: String?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,7 +39,7 @@ class SettingsViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
         navigationItem.title = "Projects"
     }
-    
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         if editing {
             navigationItem.leftBarButtonItem = nil
@@ -52,7 +52,7 @@ class SettingsViewController: UITableViewController {
     @objc func addTapped() {
         self.performSegue(withIdentifier: Segues.addProject, sender: self)
     }
-    
+
     @objc func doneTapped() {
         self.dismiss(animated: true)
     }
@@ -60,15 +60,16 @@ class SettingsViewController: UITableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
-    
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return section == 0 ? projects.count : 1
     }
-   
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell: ProjectTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ProjectCell", for: indexPath) as! ProjectTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectCell", for: indexPath) as? ProjectTableViewCell else {
+                fatalError("Invalid table view cell")
+            }
             let project = projects[indexPath.row]
             cell.setProject(project)
             cell.accessoryType = project.id == selectedProjectId ? .checkmark : .none
@@ -80,7 +81,7 @@ class SettingsViewController: UITableViewController {
             return cell
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         var rowsToReload = [IndexPath]()
         if editingStyle == .delete {
@@ -93,7 +94,7 @@ class SettingsViewController: UITableViewController {
                     rowsToReload.append(IndexPath(row: 0, section: 0))
                 }
             }
-            
+
             do {
                 if let userDefaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement) {
                     let data = try JSONEncoder().encode(projects)
@@ -108,11 +109,11 @@ class SettingsViewController: UITableViewController {
             tableView.reloadRows(at: rowsToReload, with: .none)
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        if let currentlySelectedProject = projects.first(where:{ $0.id == selectedProjectId }),
+        if let currentlySelectedProject = projects.first(where: { $0.id == selectedProjectId }),
            let cellIndex = projects.firstIndex(of: currentlySelectedProject),
            let previousCell = tableView.cellForRow(at: IndexPath(row: cellIndex, section: indexPath.section)) {
                 previousCell.accessoryType = .none
@@ -125,7 +126,7 @@ class SettingsViewController: UITableViewController {
         }
         doneTapped()
     }
-    
+
     private func selectProject(id: String?) {
         selectedProjectId = id
         if let userDefaults = UserDefaults(suiteName: DefaultsKey.groupEntitlement) {

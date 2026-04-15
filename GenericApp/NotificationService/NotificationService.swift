@@ -21,10 +21,11 @@ import UserNotifications
 import ORLib
 
 class NotificationService: UNNotificationServiceExtension {
-    
+
     public var contentHandler: ((UNNotificationContent) -> Void)?
     public var bestAttemptContent: UNMutableNotificationContent?
 
+    // swiftlint:disable:next cyclomatic_complexity
     open override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         self.contentHandler = contentHandler
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
@@ -34,7 +35,7 @@ class NotificationService: UNNotificationServiceExtension {
             let categoryName = "openremoteNotification"
             bestAttemptContent.categoryIdentifier = categoryName
 
-            //Buttons
+            // Buttons
             if let buttonsString = bestAttemptContent.userInfo[DefaultsKey.buttonsKey] as? String {
                 if let buttonsData = buttonsString.data(using: .utf8) {
                     if let buttons = try? JSONDecoder().decode([ORPushNotificationButton].self, from: buttonsData) {
@@ -50,14 +51,14 @@ class NotificationService: UNNotificationServiceExtension {
                         }
 
                         let category = UNNotificationCategory(identifier: categoryName, actions: notificationActions, intentIdentifiers: [], options: [])
-                        let categories : Set = [category]
+                        let categories: Set = [category]
                         UNUserNotificationCenter.current().setNotificationCategories(categories)
                     }
                 }
             }
-            //Actions
+            // Actions
             if let actionString = bestAttemptContent.userInfo[DefaultsKey.actionKey] as? String {
-                if let actionsData = actionString.data(using: .utf8){
+                if let actionsData = actionString.data(using: .utf8) {
                     if let action = try? JSONDecoder().decode(ORPushNotificationAction.self, from: actionsData) {
 
                         bestAttemptContent.userInfo[ActionType.appUrl] = action.url
@@ -75,19 +76,18 @@ class NotificationService: UNNotificationServiceExtension {
                 }
             }
 
-            contentHandler(bestAttemptContent.copy() as! UNNotificationContent)
+            contentHandler(bestAttemptContent.copy() as! UNNotificationContent) // swiftlint:disable:this force_cast
         }
     }
-
 
     open override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         NSLog("NotifExtension Time has expired")
         if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
-            //Actions
+            // Actions
             if let actionString = bestAttemptContent.userInfo[DefaultsKey.actionKey] as? String {
-                if let actionsData = actionString.data(using: .utf8){
+                if let actionsData = actionString.data(using: .utf8) {
                     if let action = try? JSONDecoder().decode(ORPushNotificationAction.self, from: actionsData) {
 
                         bestAttemptContent.userInfo[ActionType.appUrl] = action.url
